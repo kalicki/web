@@ -40,7 +40,8 @@ var browserify = require('browserify'),
 	stripify = require('stripify'),
 	envify = require('envify'),
 	brfs = require('brfs'),
-	exorcist = require('exorcist');
+	exorcist = require('exorcist'),
+	karma = require('karma').server;
 
 // Modules
 var serve = require('./serve');
@@ -414,12 +415,11 @@ gulp.task('clean', function () {
 });
 
 // Run some unit tests to check key logic
-gulp.task('tests', function() {
-	return gulp.src(paths.tests.unit.input)
-		.pipe(plumber())
-		.pipe(plg.babel())
-		.pipe(gulp.dest(os.tmpdir()))
-		.pipe(plg.jasmine());
+gulp.task('tests', function (done) {
+	karma.start({
+		configFile: __dirname + '/karma.conf.js',
+		singleRun: true
+	}, done);
 });
 
 // Automatically install all bower dependencies
